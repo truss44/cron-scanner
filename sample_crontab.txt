@@ -1,0 +1,16 @@
+# Sample crontab demonstrating various formats
+SHELL=/bin/bash
+
+# User crontab style (no username column)
+*/5 * * * * /usr/local/bin/backup.sh --full --dest /mnt/backup
+30 2 * * 1-5 /usr/bin/echo "Hello ; world" # inline comment after command with a semicolon in quotes
+
+# System-style crontab entries (with username column)
+1 1 * * * username /path/to/your/script.sh --foo bar; /path/to/your/script2.sh -v --flag
+@hourly username /usr/bin/find /var/log -type f -mtime +7 -delete
+@reboot username /usr/local/bin/onboot.sh --init
+
+# Blank lines and comments should be ignored
+
+# Environment variable assignment should be ignored
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin

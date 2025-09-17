@@ -1,0 +1,19 @@
+# Sample crontab for Windows usage (used as an input file to Cron Scanner)
+# Note: This uses standard Unix crontab syntax, but with Windows-style paths/commands.
+# Lines beginning with # and blank lines are ignored.
+# Environment variable assignments (e.g., PATH=...) are ignored.
+
+# Every 15 minutes
+*/15 * * * * C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -File C:\\scripts\\rotate-logs.ps1 -KeepDays 7
+
+# Daily at 02:30, with arguments and an inline comment
+30 2 * * * C:\\Python39\\python.exe C:\\scripts\\backup.py --dest D:\\backups # comment should be ignored
+
+# Weekdays at 18:00, two commands separated by semicolon (each one becomes a separate entry)
+0 18 * * 1-5 C:\\Windows\\System32\\cmd.exe /c "C:\\scripts\\report.bat --daily"; C:\\Windows\\System32\\cmd.exe /c "C:\\scripts\\cleanup.bat"
+
+# System-style line with username column (useful if you export from systems that include a user)
+5 4 * * * someuser C:\\Windows\\System32\\schtasks.exe /run /tn "MyTask"
+
+# Special macro with username and arguments (username optional)
+@hourly someuser C:\\Windows\\System32\\cmd.exe /c "C:\\scripts\\hourly-job.bat --flag"
