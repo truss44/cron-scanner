@@ -1,6 +1,10 @@
 import os
 from typing import List, Dict, Any
 from .base import BaseFormatter
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 
 class PDFFormatter(BaseFormatter):
     """Formatter for PDF output."""
@@ -24,14 +28,8 @@ class PDFFormatter(BaseFormatter):
             
         output_path = self._ensure_extension(output_path, 'pdf')
         
-        from reportlab.lib import colors
-        from reportlab.lib.pagesizes import letter
-        from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
-        from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-        from reportlab.lib.units import inch
-        
         # Create the PDF document
-        doc = SimpleDocTemplate(output_path, pagesize=letter)
+        doc = SimpleDocTemplate(output_path, pagesize=landscape(A4))
         elements = []
         
         # Add title
