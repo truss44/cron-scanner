@@ -37,3 +37,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           semantic-release -v version --push --vcs-release
+
+      - name: Update 'latest' tag to most recent release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          git fetch --tags --force
+          # Determine the most recent tag (newest SemVer tag pushed by semantic-release)
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          echo "Most recent release tag: $LATEST_TAG"
+          # Point/move local 'latest' tag to that tag's commit
+          git tag -f latest "$LATEST_TAG"
+          # Remove remote 'latest' if it exists (ignore error), then push updated tag
+          git push origin :refs/tags/latest || true
+          git push origin refs/tags/latest
