@@ -56,11 +56,12 @@ if (Test-Command 'python') {
     Write-Error 'Python 3 was not found on PATH. Please install Python 3 and try again.'
 }
 
-function Invoke-Py([string[]]$Args) {
+function Invoke-Py {
+    param([string[]]$PyArgList)
     if ($UsePyLauncher) {
-        & py @('-3') @Args
+        & py -3 @PyArgList
     } else {
-        & python @Args
+        & python @PyArgList
     }
 }
 
@@ -132,7 +133,8 @@ function Run-Scanner {
     if ($script:UseVenv) {
         & $VenvPython -m cron_scanner.scanner @argsList
     } else {
-        Invoke-Py @('-m','cron_scanner.scanner') @argsList
+        $fullArgs = @('-m','cron_scanner.scanner') + $argsList
+        Invoke-Py $fullArgs
     }
 }
 
