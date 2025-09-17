@@ -6,7 +6,7 @@ A Python tool to scan and analyze crontab entries within a specified time range 
 
 - Parse system crontab or a custom crontab file
 - Filter cron jobs that would run within a specified time range
-- Export results to multiple formats: CSV, JSON, XLSX, Text, or PDF
+- Export results to multiple formats: CSV, JSON, XLSX, Text, Markdown, or PDF
 - Easy-to-use command-line interface
 - No installation required (runs in a virtual environment)
 - Understands system-style crontabs with a username column (e.g. `/etc/crontab`, `/etc/cron.d/*`) and user crontabs
@@ -56,7 +56,7 @@ A Python tool to scan and analyze crontab entries within a specified time range 
 
 ```
 usage: cron_scanner.py [-h] [-f FILE] [-s START_TIME] [-e END_TIME] [-t TIME_SPAN]
-                      [-o OUTPUT] [-F {csv,json,xlsx,text,pdf}]
+                      [-o OUTPUT] [-F {csv,json,xlsx,text,pdf,md,markdown}]
 
 Cron Scanner - Scan crontab entries within a specified time range.
 
@@ -71,7 +71,7 @@ optional arguments:
                         Time span from start time (e.g., 1d, 2h, 30m, 1h30m) (mutually exclusive with --end-time)
   -o OUTPUT, --output OUTPUT
                         Output file path (default: writes to a timestamped file in the current directory)
-  -F {csv,json,xlsx,text,pdf}, --format {csv,json,xlsx,text,pdf}
+  -F {csv,json,xlsx,text,pdf,md,markdown}, --format {csv,json,xlsx,text,pdf,md,markdown}
                         Output format (default: csv)
 ```
 
@@ -89,6 +89,7 @@ optional arguments:
 - **JSON**: JavaScript Object Notation
 - **XLSX**: Microsoft Excel format
 - **Text**: Formatted plain text
+- **Markdown**: GitHub-flavored Markdown table (`.md`)
 - **PDF**: Portable Document Format
   
 All formats include a `description` field translating the cron expression into plain English, e.g. `*/15 * * * *` → "Every 15 minutes", `0 18 * * 1-5` → "At 18:00 on Monday through Friday".
@@ -123,6 +124,11 @@ All formats include a `description` field translating the cron expression into p
 6. **Custom crontab file**:
    ```bash
    ./run.sh --args="--file /path/to/crontab --format text --output cron_jobs.txt"
+   ```
+
+7. **Export to Markdown**:
+   ```bash
+   ./run.sh --args="--format md --output cron_jobs.md"
    ```
 
 ## Windows usage (PowerShell)
@@ -163,6 +169,9 @@ Custom time range and formats:
 # Excel and PDF outputs
 ./run.ps1 -File .\sample_crontab_windows.txt -TimeSpan 2d -Format xlsx -Output .\cron_jobs.xlsx
 ./run.ps1 -File .\sample_crontab_windows.txt -TimeSpan 1d -Format pdf -Output .\cron_jobs.pdf
+
+# Markdown output
+./run.ps1 -File .\sample_crontab_windows.txt -TimeSpan 1d -Format md -Output .\cron_jobs.md
 ```
 
 Maintenance:
