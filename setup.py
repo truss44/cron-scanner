@@ -9,9 +9,8 @@ setup(
     description='A tool to scan and analyze crontab entries within a specified time range',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    author='Your Name',
-    author_email='your.email@example.com',
-    url='https://github.com/yourusername/cron-scanner',
+    author='Tracey Russell',
+    url='https://github.com/truss44/cron-scanner',
     packages=find_packages(),
     install_requires=[
         'pandas>=2.0.0',
