@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from typing import List, Dict, Any, Optional, Type
 from .parser import CronParser
 from .formatters import (
-    CSVFormatter, JSONFormatter, XLSXFormatter, TextFormatter, PDFFormatter
+    CSVFormatter, JSONFormatter, XLSXFormatter, TextFormatter, PDFFormatter, MarkdownFormatter
 )
 from . import __version__ as APP_VERSION
 
@@ -20,7 +20,9 @@ FORMATTERS = {
     'json': JSONFormatter,
     'xlsx': XLSXFormatter,
     'text': TextFormatter,
-    'pdf': PDFFormatter
+    'pdf': PDFFormatter,
+    'md': MarkdownFormatter,
+    'markdown': MarkdownFormatter
 }
 
 class CronScanner:
@@ -63,7 +65,7 @@ class CronScanner:
         
         Args:
             entries: List of cron entries to export
-            output_format: Output format (csv, json, xlsx, text, pdf)
+            output_format: Output format (csv, json, xlsx, text, pdf, md, markdown)
             output_file: Path to the output file (optional)
             
         Returns:
@@ -206,7 +208,7 @@ def main():
         output_path = args.output
         if output_path is None:
             # Default to writing a file in the current working directory
-            ext_map = {'csv': 'csv', 'json': 'json', 'xlsx': 'xlsx', 'text': 'txt', 'pdf': 'pdf'}
+            ext_map = {'csv': 'csv', 'json': 'json', 'xlsx': 'xlsx', 'text': 'txt', 'pdf': 'pdf', 'md': 'md', 'markdown': 'md'}
             ext = ext_map.get(args.format, args.format)
             # Create a descriptive filename based on the time window
             end_time_effective = end_time if end_time is not None else (start_time + time_span)

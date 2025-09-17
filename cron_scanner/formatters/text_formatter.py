@@ -1,6 +1,6 @@
 import os
 from typing import List, Dict, Any
-from .base import BaseFormatter
+from .base import BaseFormatter, get_all_fields, humanize_headers
 
 class TextFormatter(BaseFormatter):
     """Formatter for plain text output."""
@@ -19,17 +19,14 @@ class TextFormatter(BaseFormatter):
         if not entries:
             return ""
             
-        # Use stable column order from the first entry, and append any new fields encountered later
-        all_fields: List[str] = list(entries[0].keys())
-        for entry in entries[1:]:
-            for k in entry.keys():
-                if k not in all_fields:
-                    all_fields.append(k)
+        # Use shared canonical union for consistent ordering
+        all_fields = get_all_fields(entries)
+        header_labels = humanize_headers(all_fields)
         
-        # Find the maximum width for each field for nice alignment
-        field_widths = {}
-        for field in all_fields:
-            max_len = len(str(field))
+        # Find the maximum width for each column considering header labels and values
+        field_widths: Dict[str, int] = {}
+        for idx, field in enumerate(all_fields):
+            max_len = len(str(header_labels[idx]))
             for entry in entries:
                 if field in entry:
                     max_len = max(max_len, len(str(entry[field])))
@@ -42,8 +39,8 @@ class TextFormatter(BaseFormatter):
         
         # Build the output
         output = []
-        # Header
-        output.append(format_str.format(*all_fields))
+        # Header (human-readable labels)
+        output.append(format_str.format(*header_labels))
         # Separator
         output.append("-" * sum(field_widths.values()))
         

@@ -6,6 +6,7 @@ from .json_formatter import JSONFormatter
 from .xlsx_formatter import XLSXFormatter
 from .text_formatter import TextFormatter
 from .pdf_formatter import PDFFormatter
+from .markdown_formatter import MarkdownFormatter
 
 __all__ = [
     'BaseFormatter',
@@ -14,4 +15,5 @@ __all__ = [
     'XLSXFormatter',
     'TextFormatter',
     'PDFFormatter',
+    'MarkdownFormatter',
 ]
