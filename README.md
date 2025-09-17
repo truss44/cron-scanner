@@ -256,3 +256,44 @@ This project is open source and available under the [MIT License](LICENSE).
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Releasing
+
+Releases are automated using `python-semantic-release`, and the package version is kept in sync across both `cron_scanner/__init__.py` (`__version__`) and `setup.py` (`version=`) via `pyproject.toml` configuration.
+
+- **Versioning**
+  - Follows Semantic Versioning (SemVer) and Conventional Commits.
+  - First release starts at `1.0.0` by default.
+
+- **What is updated automatically**
+  - `cron_scanner/__init__.py:__version__`
+  - `setup.py:version`
+  - Git tag (e.g., `v1.0.0`)
+  - GitHub Release with built assets (on CI)
+
+- **Local dry run** (no changes pushed):
+  ```bash
+  pip install python-semantic-release
+  semantic-release -v --noop version
+  # If that looks good, try a run without pushing/tags/releases
+  semantic-release -v version --no-push --no-vcs-release
+  ```
+
+- **CI release (GitHub Actions)**
+  - On push to `main`, the workflow `.github/workflows/release.yml` runs:
+    ```bash
+    semantic-release -v version --push --vcs-release
+    ```
+  - It uses `secrets.GITHUB_TOKEN` as `GH_TOKEN` to push commits/tags and create the GitHub Release.
+
+- **Conventional Commit examples**
+  - `fix(parser): handle env var lines properly`
+  - `feat(formatters): add markdown export`
+  - `perf(scanner): speed up cron iteration`
+  - `refactor: simplify option parsing`
+  - `docs: improve README examples`
+  - `BREAKING CHANGE: rename CLI flag --format to --output-format`
+
+- **Manual notes**
+  - You normally do not set the version manually. Let semantic-release determine it from commit messages and stamp files for you.
+  - If you must change the version manually for a one-off, ensure both `cron_scanner/__init__.py` and `setup.py` match; the release step will maintain consistency thereafter.

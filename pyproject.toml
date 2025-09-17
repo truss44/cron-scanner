@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "build"]
+build-backend = "setuptools.build_meta"
+
+[tool.semantic_release]
+# Ensure first release starts at 1.0.0
+allow_zero_version = false
+# Tag format like v1.0.0
+tag_format = "v{version}"
+# Stamp version into both the package __init__ and setup.py's version field
+version_variables = [
+  "cron_scanner/__init__.py:__version__",
+  "setup.py:version"
+]
+# Build both sdist and wheel as part of the release
+build_command = "python -m build --sdist --wheel ."
+
+[tool.semantic_release.remote]
+# By default PSR expects GH_TOKEN; we map GitHub Actions' GITHUB_TOKEN to GH_TOKEN in CI
+token = "GH_TOKEN"
+
+[tool.semantic_release.publish]
+# Create a GitHub Release and upload built artifacts when --vcs-release is used
+upload_to_vcs_release = true
