@@ -5,7 +5,7 @@ with open('README.md', 'r', encoding='utf-8') as f:
 
 setup(
     name='cron-scanner',
-    version='1.0.0',
+    version='1.0.1',
     description='A tool to scan and analyze crontab entries within a specified time range',
     long_description=long_description,
     long_description_content_type='text/markdown',
