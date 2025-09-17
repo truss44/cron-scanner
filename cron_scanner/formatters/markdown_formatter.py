@@ -1,6 +1,6 @@
 import os
 from typing import List, Dict, Any
-from .base import BaseFormatter
+from .base import BaseFormatter, get_all_fields, humanize_headers
 
 
 def _escape_md(text: str) -> str:
@@ -29,20 +29,17 @@ class MarkdownFormatter(BaseFormatter):
         Returns:
             str: Markdown content or path to the .md file
         """
-        # Build a stable union of field names, preferring canonical ordering
-        canonical = ['schedule', 'description', 'command', 'user', 'next_run', 'line_number', 'line_content']
-        all_fields = list(canonical)
-        for entry in entries:
-            for k in entry.keys():
-                if k not in all_fields:
-                    all_fields.append(k)
+        # Build a stable union of field names using shared helper
+        all_fields = get_all_fields(entries)
 
         if not entries and output_path is None:
             # Match CSV/Text behavior: return empty when no entries and no file is requested
             return ""
 
-        # Header
-        header = "| " + " | ".join(all_fields) + " |"
+        # Header (human-readable labels for non-JSON formats)
+        header_labels = humanize_headers(all_fields)
+        header_labels_esc = [_escape_md(h) for h in header_labels]
+        header = "| " + " | ".join(header_labels_esc) + " |"
         separator = "| " + " | ".join(["---"] * len(all_fields)) + " |"
 
         # Rows

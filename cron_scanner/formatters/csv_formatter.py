@@ -1,7 +1,7 @@
 import csv
 import os
 from typing import List, Dict, Any
-from .base import BaseFormatter
+from .base import BaseFormatter, get_all_fields, humanize_headers
 
 class CSVFormatter(BaseFormatter):
     """Formatter for CSV output."""
@@ -17,28 +17,27 @@ class CSVFormatter(BaseFormatter):
         Returns:
             str: CSV content or path to the CSV file
         """
-        # Build a stable union of fieldnames across all entries
-        default_fields = ['schedule', 'description', 'command', 'user', 'next_run', 'line_number', 'line_content']
-        fieldnames = list(default_fields)
-        for entry in entries:
-            for k in entry.keys():
-                if k not in fieldnames:
-                    fieldnames.append(k)
+        # Build a stable union of fieldnames across all entries using shared helper
+        fieldnames = get_all_fields(entries)
+        header_labels = humanize_headers(fieldnames)
         
         if output_path:
             output_path = self._ensure_extension(output_path, 'csv')
-            with open(output_path, 'w', newline='') as f:
-                writer = csv.DictWriter(f, fieldnames=fieldnames)
-                writer.writeheader()
-                if entries:
-                    writer.writerows(entries)
+            with open(output_path, 'w', newline='', encoding='utf-8') as f:
+                writer = csv.writer(f)
+                # Always write header row with human-readable labels
+                writer.writerow(header_labels)
+                # Write rows in field order
+                for entry in entries:
+                    writer.writerow([entry.get(field, "") for field in fieldnames])
             return output_path
         else:
             if not entries:
                 return ""
             import io
             output = io.StringIO()
-            writer = csv.DictWriter(output, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerows(entries)
+            writer = csv.writer(output)
+            writer.writerow(header_labels)
+            for entry in entries:
+                writer.writerow([entry.get(field, "") for field in fieldnames])
             return output.getvalue()

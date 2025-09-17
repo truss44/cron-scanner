@@ -1,6 +1,6 @@
 import os
 from typing import List, Dict, Any
-from .base import BaseFormatter
+from .base import BaseFormatter, get_all_fields, humanize_headers
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
@@ -52,6 +52,17 @@ class PDFFormatter(BaseFormatter):
             spaceBefore=0,
             wordWrap='CJK',
         )
+        # Header cell style with wrapping enabled
+        header_style = ParagraphStyle(
+            'TableHeader',
+            parent=styles['BodyText'],
+            fontSize=10,
+            leading=12,
+            spaceAfter=0,
+            spaceBefore=0,
+            wordWrap='CJK',
+            textColor=colors.whitesmoke,
+        )
         title_style = ParagraphStyle(
             'Title',
             parent=styles['Title'],
@@ -68,16 +79,14 @@ class PDFFormatter(BaseFormatter):
             
         # Prepare data for table
         if entries:
-            # Build a stable union of field names, preferring canonical ordering
-            canonical = ['schedule', 'description', 'command', 'user', 'next_run', 'line_number', 'line_content']
-            all_fields = list(canonical)
-            for entry in entries:
-                for k in entry.keys():
-                    if k not in all_fields:
-                        all_fields.append(k)
+            # Build a stable union of field names using shared helper
+            all_fields = get_all_fields(entries)
             
             # Create table data
-            table_data = [all_fields]  # Header row
+            # Build human-friendly headers and wrap them to avoid overflow into adjacent cells
+            display_headers = humanize_headers(all_fields)
+            header_row = [Paragraph(escape(h), header_style) for h in display_headers]
+            table_data = [header_row]  # Header row
             for entry in entries:
                 row = []
                 for field in all_fields:
@@ -109,6 +118,8 @@ class PDFFormatter(BaseFormatter):
                 ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
                 ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                # Center-align header labels only
+                ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
                 ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
                 ('FONTSIZE', (0, 0), (-1, 0), 10),
                 ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
@@ -117,6 +128,11 @@ class PDFFormatter(BaseFormatter):
                 ('BOX', (0, 0), (-1, -1), 1, colors.black),
                 ('VALIGN', (0, 0), (-1, -1), 'TOP'),
                 ('FONTSIZE', (0, 1), (-1, -1), 8),
+                # Slightly reduce padding to give text more room within narrow columns
+                ('LEFTPADDING', (0, 0), (-1, -1), 4),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+                ('TOPPADDING', (0, 1), (-1, -1), 4),
+                ('BOTTOMPADDING', (0, 1), (-1, -1), 4),
             ])
             
             # Alternate row colors
