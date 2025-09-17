@@ -18,6 +18,7 @@ setup(
         'reportlab>=4.0.0',
         'python-dateutil>=2.8.2',
         'croniter>=1.4.0',
+        'cron-descriptor>=1.4.3',
     ],
     entry_points={
         'console_scripts': [

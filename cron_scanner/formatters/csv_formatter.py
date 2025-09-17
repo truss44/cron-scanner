@@ -18,7 +18,7 @@ class CSVFormatter(BaseFormatter):
             str: CSV content or path to the CSV file
         """
         # Build a stable union of fieldnames across all entries
-        default_fields = ['schedule', 'command', 'user', 'next_run', 'line_number', 'line_content']
+        default_fields = ['schedule', 'description', 'command', 'user', 'next_run', 'line_number', 'line_content']
         fieldnames = list(default_fields)
         for entry in entries:
             for k in entry.keys():

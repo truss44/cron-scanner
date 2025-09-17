@@ -3,6 +3,7 @@ import re
 from datetime import datetime, timedelta
 from typing import List, Dict, Any, Optional, Tuple
 from croniter import croniter
+from cron_descriptor import get_description as cron_get_description, Options as CronOptions
 import getpass
 import subprocess
 import shutil
@@ -123,6 +124,7 @@ class CronParser:
                     # Create a cron entry
                     entry = {
                         'schedule': schedule,
+                        'description': self._describe_schedule(schedule),
                         'command': cmd_clean,
                         'user': user if user else self._current_user(),
                         'line_number': line_num,
@@ -352,3 +354,26 @@ class CronParser:
         if special == '@reboot':
             return None
         return mapping.get(special, special)
+
+    def _describe_schedule(self, schedule: str) -> str:
+        """Return a human-readable description of a cron schedule.
+
+        Uses cron-descriptor with 24-hour time format. Supports @macros; returns a
+        friendly phrase for @reboot. Falls back to the raw schedule on error.
+        """
+        try:
+            # Expand @macros except @reboot
+            if schedule.startswith('@'):
+                expanded = self._expand_special(schedule)
+                if expanded is None:
+                    return 'At reboot'
+                expr = expanded
+            else:
+                expr = schedule
+
+            options = CronOptions()
+            options.use_24hour_time_format = True
+            return cron_get_description(expr, options)
+        except Exception:
+            # Fallback to the schedule string if description cannot be generated
+            return schedule

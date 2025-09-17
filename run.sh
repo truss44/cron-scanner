@@ -48,6 +48,7 @@ setup_venv() {
         else
             echo "Warning: Could not create a virtual environment (python3-venv may be missing)." >&2
             echo "Falling back to user-level installation without a virtual environment." >&2
+            echo "Tip: On Debian/Ubuntu/WSL, run: sudo apt install python3-venv" >&2
             USE_VENV=false
             # Try to ensure pip exists and is recent
             if ! python3 -m pip --version >/dev/null 2>&1; then
@@ -57,17 +58,24 @@ setup_venv() {
             python3 -m pip install --user --upgrade pip
         fi
     else
-        # Activate the virtual environment
-        if [ -f "$VENV_DIR/bin/activate" ]; then
-            # shellcheck disable=SC1090
-            source "$VENV_DIR/bin/activate"
-            # Verify venv has working pip, otherwise fall back
-            if ! "$VENV_DIR/bin/python" -m pip --version >/dev/null 2>&1; then
-                echo "Virtual environment appears broken. Falling back to user-level installs." >&2
+        # If venv exists, validate it; if broken, recreate it
+        if [ ! -f "$VENV_DIR/bin/activate" ] || ! "$VENV_DIR/bin/python" -m pip --version >/dev/null 2>&1; then
+            echo "Existing virtual environment appears missing or broken. Recreating..." >&2
+            rm -rf "$VENV_DIR"
+            if python3 -m venv "$VENV_DIR"; then
+                # shellcheck disable=SC1090
+                source "$VENV_DIR/bin/activate"
+                echo "Upgrading pip..."
+                pip install --upgrade pip
+            else
+                echo "Warning: Could not recreate virtual environment (python3-venv may be missing)." >&2
+                echo "Falling back to user-level installation without a virtual environment." >&2
+                echo "Tip: On Debian/Ubuntu/WSL, run: sudo apt install python3-venv" >&2
                 USE_VENV=false
             fi
         else
-            USE_VENV=false
+            # shellcheck disable=SC1090
+            source "$VENV_DIR/bin/activate"
         fi
     fi
 }
@@ -81,6 +89,10 @@ install_reqs() {
         echo "Installing requirements into user site-packages..."
         if python3 -m pip --version >/dev/null 2>&1; then
             python3 -m pip install --user -r "$PROJECT_DIR/requirements.txt"
+        elif command -v pip3 >/dev/null 2>&1; then
+            pip3 install --user -r "$PROJECT_DIR/requirements.txt"
+        elif command -v pip >/dev/null 2>&1; then
+            pip install --user -r "$PROJECT_DIR/requirements.txt"
         else
             echo "pip not found for Python 3. Attempting to bootstrap via ensurepip..." >&2
             if python3 -m ensurepip --upgrade >/dev/null 2>&1; then
@@ -88,7 +100,7 @@ install_reqs() {
             else
                 echo "Failed to bootstrap pip automatically." >&2
                 echo "Please install pip or the Python venv module and re-run:" >&2
-                echo "  - Debian/Ubuntu: sudo apt install python3-pip    (or: sudo apt install python3-venv)" >&2
+                echo "  - Debian/Ubuntu/WSL: sudo apt install python3-pip    (and optionally: sudo apt install python3-venv)" >&2
                 echo "  - Fedora: sudo dnf install python3-pip" >&2
                 echo "  - Arch: sudo pacman -S python-pip" >&2
                 exit 1

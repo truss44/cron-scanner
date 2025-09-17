@@ -53,7 +53,7 @@ class PDFFormatter(BaseFormatter):
         # Prepare data for table
         if entries:
             # Build a stable union of field names, preferring canonical ordering
-            canonical = ['schedule', 'command', 'user', 'next_run', 'line_number', 'line_content']
+            canonical = ['schedule', 'description', 'command', 'user', 'next_run', 'line_number', 'line_content']
             all_fields = list(canonical)
             for entry in entries:
                 for k in entry.keys():

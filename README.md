@@ -12,6 +12,7 @@ A Python tool to scan and analyze crontab entries within a specified time range 
 - Understands system-style crontabs with a username column (e.g. `/etc/crontab`, `/etc/cron.d/*`) and user crontabs
 - Supports multiple commands on one line separated by `;` (each command becomes its own entry)
 - Ignores blank lines, comments, and environment variable assignments
+- Adds a human-readable `description` column for each schedule (like crontab.guru), using 24-hour time format
 
 ## Prerequisites
 
@@ -89,6 +90,8 @@ optional arguments:
 - **XLSX**: Microsoft Excel format
 - **Text**: Formatted plain text
 - **PDF**: Portable Document Format
+  
+All formats include a `description` field translating the cron expression into plain English, e.g. `*/15 * * * *` → "Every 15 minutes", `0 18 * * 1-5` → "At 18:00 on Monday through Friday".
 
 ## Examples
 
