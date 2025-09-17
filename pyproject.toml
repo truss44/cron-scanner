@@ -12,7 +12,7 @@ version_variables = [
 build_command = "python -m build --sdist --wheel ."
 
 [tool.semantic_release.remote]
-token = "GH_TOKEN"
+token = "GITHUB_TOKEN"
 
 [tool.semantic_release.publish]
 upload_to_vcs_release = true
