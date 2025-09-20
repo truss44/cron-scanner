@@ -2,6 +2,22 @@
 
 <!-- version list -->
 
+## v1.1.0 (2025-09-20)
+
+### Chores
+
+- Add dependabot configuration for pip and github actions dependencies
+  ([`a745685`](https://github.com/truss44/cron-scanner/commit/a74568566d8b3dc95ba3ffa14af689b729b9cc34))
+
+- **deps**: Bump the github-actions group with 2 updates
+  ([`672c9e7`](https://github.com/truss44/cron-scanner/commit/672c9e7200b0db1c350b8650124e88ac261ae93e))
+
+### Features
+
+- Bump minimum Python version to 3.9 and update package dependencies
+  ([`668a9cd`](https://github.com/truss44/cron-scanner/commit/668a9cd0b9d4b8ffb3ac72f2a69ff4907181602f))
+
+
 ## v1.0.2 (2025-09-20)
 
 ### Bug Fixes
