@@ -16,7 +16,7 @@ A Python tool to scan and analyze crontab entries within a specified time range 
 
 ## Prerequisites
 
-- Python 3.6 or higher
+- Python 3.9 or higher
 - pip (Python package manager)
 
 ## Installation
