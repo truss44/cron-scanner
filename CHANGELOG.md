@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v1.1.1 (2026-04-12)
+
+### Bug Fixes
+
+- Use GH_TOKEN PAT for release to bypass branch protection
+  ([`311bc3e`](https://github.com/truss44/cron-scanner/commit/311bc3e8ea21e714b1d3b9cef6d161b2aa4cbc75))
+
+### Chores
+
+- **deps**: Bump actions/checkout in the github-actions group
+  ([`ee570bb`](https://github.com/truss44/cron-scanner/commit/ee570bba6c3f29fa82f8ba01c69c91a1ada48c88))
+
+
 ## v1.1.0 (2025-09-20)
 
 ### Chores
