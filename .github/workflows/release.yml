@@ -62,8 +62,8 @@ jobs:
         run: |
           set -e
           git fetch --tags --force
-          # Determine the most recent tag (newest SemVer tag pushed by semantic-release)
-          LATEST_TAG=$(git describe --tags --abbrev=0)
+          # Determine the most recent tag (highest SemVer tag)
+          LATEST_TAG=$(git tag --sort=-version:refname | head -n 1)
           echo "Most recent release tag: $LATEST_TAG"
           # Point/move local 'latest' tag to that tag's commit
           git tag -f latest "$LATEST_TAG"
