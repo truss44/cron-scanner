@@ -2,4 +2,4 @@
 Cron Scanner - A tool to scan and analyze crontab entries within a specified time range.
 """
 
-__version__ = "1.1.1"
+__version__ = "1.2.0"

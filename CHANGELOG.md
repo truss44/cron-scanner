@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.2.0 (2026-04-12)
+
+### Features
+
+- Add SSH commit signing to release workflow
+  ([`80e48df`](https://github.com/truss44/cron-scanner/commit/80e48dfa1cb7608aab1ff9e1b1e4a580ecf35c6e))
+
+
 ## v1.1.1 (2026-04-12)
 
 ### Bug Fixes
