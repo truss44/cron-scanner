@@ -13,9 +13,9 @@ setup(
     url='https://github.com/truss44/cron-scanner',
     packages=find_packages(),
     install_requires=[
-        'pandas>=2.0.0',
+        'pandas>=3.0.0',
         'openpyxl>=3.1.0',
-        'reportlab>=4.0.0',
+        'reportlab>=5.0.0',
         'python-dateutil>=2.9.0',
         'croniter>=6.0.0',
         'cron-descriptor>=2.0.6',
