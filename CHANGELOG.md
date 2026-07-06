@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v1.3.0 (2026-07-06)
+
+### Chores
+
+- **deps**: Bump actions/checkout in the github-actions group
+  ([`93a4ac6`](https://github.com/truss44/cron-scanner/commit/93a4ac645a5354ede30f953bd4172303a5467456))
+
+### Features
+
+- Upgrade pandas to 3.0 and reportlab to 5.0
+  ([`29c4759`](https://github.com/truss44/cron-scanner/commit/29c47593c610967984ec1a20f2178d3cbd9b555a))
+
+
 ## v1.2.0 (2026-04-12)
 
 ### Features
